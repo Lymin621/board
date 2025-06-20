@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/common.css}" rel="stylesheet" />
+    <style>
+        body {margin:0px; padding: 0px; }
+        h1 {
+          text-align: center;
+        }
+
+        img {
+          width: 160px;
+          height: 90px;
+        }
+
+        table {
+          border-collapse: collapse;
+          width: 80%;
+          max-width: 100%;
+          margin: 20px auto;
+          text-align: center;
+        }
+
+        tr {
+          border-top: 1px solid #aaa;
+        }
+
+        tr:nth-last-of-child(1) {
+          border-bottom: 1px solid #aaa;
+        }
+
+        th {
+          background-color: #aaa;
+        }
+
+        #contentBox {
+          display: none;
+          position: absolute;
+          transform: translate(50vw, 50vh);
+          border-radius: 5px;
+          background-color: beige;
+          border: 1px solid #ddd;
+          padding: 10px 20px;
+        }
+        h3 { margin-top : 0px; }
+    </style>
+</head>
+<body>
+<div id="contentBox"></div>
+<h1>글 목록</h1>
+<table id="boardTable">
+    <colgroup>
+        <col span="2" style="width:10%;">
+        <col style="width:5%;">
+        <col>
+        <col span="2" style="width:10%;">
+    </colgroup>
+    <tr>
+        <th>섬네일</th>
+        <th>다운로드</th>
+        <th>번호</th>
+        <th>제목</th>
+        <th>글쓴이</th>
+        <th>등록일</th>
+    </tr>
+    <tr th:each="board : ${boardList}" th:class="${'trRow'}" th:onclick="trClick(this, [[${board.bcontent}]])">
+        <!-- 실제 빌드시 경로 -->
+<!--         <td><img th:src="${imageUrl}"></td>-->
+        <!-- 테스트 시 경로 -->
+        <td><img th:src="@{'/boardImg/'+${board.bfilenamenew}}"></td>
+        <td><a th:href="@{'/download/'+${board.bfilenamenew}+'/'+${board.bfilename}}" th:text="|이미지 다운로드|"></a></td>
+        <td th:text="${board.bno}"></td>
+        <td th:text="${board.btitle}"></td>
+        <td th:text="${board.bnm}"></td>
+        <td th:text="${board.bregdate}"></td>
+    </tr>
+</table>
+<script>
+    function trClick(val, val2) {
+      let y = val.getClientRects()[0].y;
+      console.log(top);
+      document.getElementById('contentBox').style.display = 'block';
+      document.getElementById('contentBox').style.transform = 'translate(40vw, ' + y + 'px)';
+      document.getElementById('contentBox').innerHTML = '<h3>상세 내용</h3>';
+      document.getElementById('contentBox').append(val2);
+    }
+
+    document.getElementById('contentBox').onclick = function(){
+      this.removeAttribute('style');
+    };
+</script>
+</body>
+</html>
